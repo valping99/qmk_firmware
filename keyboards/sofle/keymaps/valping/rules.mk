@@ -8,10 +8,10 @@
 # (at your option) any later version.
 
 
-TRI_LAYER_ENABLE = yes          # Enable tri-layer feature (third layer activates when two others are on)
 OLED_ENABLE = yes               # Enable OLED screen support
 LTO_ENABLE = yes                # Enable Link Time Optimization for smaller and faster firmware
-VIA_ENABLE = yes                # Enable dynamic keymap configuration via VIA software
+# VIA_ENABLE = yes                # Enable dynamic keymap configuration via VIA software
+TRI_LAYER_ENABLE = yes          # Enable tri-layer feature (third layer activates when two others are on)
 
 MOUSEKEY_ENABLE = yes           # Enable keyboard keys to control mouse pointer
 EXTRAKEY_ENABLE = yes           # Enable extra keycodes like media and system controls

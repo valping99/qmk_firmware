@@ -6,13 +6,16 @@
 #define TRI_LAYER_UPPER_LAYER 3
 #define TRI_LAYER_ADJUST_LAYER 4
 #define OLED_DISPLAY_128X32
-#define DYNAMIC_KEYMAP_LAYER_COUNT 5
+#define DYNAMIC_KEYMAP_LAYER_COUNT 6
 
 /* clear default encoder def */
 #undef TAP_CODE_DELAY
 
 /* encoder support */
-#define ENCODER_RESOLUTION 2  // Phản ứng nhanh hơn, quay nhẹ là có tác dụng
+#ifdef ENCODER_RESOLUTION
+    #undef ENCODER_RESOLUTION
+#endif
+#define ENCODER_RESOLUTION 4  // Phản ứng nhanh hơn, quay nhẹ là có tác dụng
 #define OLED_TIMEOUT 300000
 
 // disable options
