@@ -186,7 +186,9 @@ static const char epd_bitmap_Layer_4 [] PROGMEM = {
 static void print_status_narrow(void) {
     // Print current mode
     uint8_t highest_layer = get_highest_layer(layer_state);
+    bool is_base_default = get_highest_layer(default_layer_state) == _QWERTY;
     bool is_gaming_default = get_highest_layer(default_layer_state) == _GAMING;
+    bool is_disable_default = get_highest_layer(default_layer_state) == _DISABLE;
 
     render_master_logo();
     oled_set_cursor(0, 4);
@@ -195,7 +197,16 @@ static void print_status_narrow(void) {
 	{
         case _QWERTY:
         case _GAMING:
-            oled_write_P(is_gaming_default ? PSTR("Game\n") : PSTR("Base\n"), false);
+		case _DISABLE:
+		if(is_base_default){
+            oled_write_P(PSTR("Base\n"), false);
+		}
+		else if(is_gaming_default){
+            oled_write_P(PSTR("Game\n"), false);
+		}
+		else if(is_disable_default){
+            oled_write_P(PSTR("Sleep\n"), false);
+		}
             break;
         case _RAISE:
             oled_write_P(PSTR("Raise"), false);
