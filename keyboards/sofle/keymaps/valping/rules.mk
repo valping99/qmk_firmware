@@ -10,7 +10,7 @@
 
 OLED_ENABLE = yes               # Enable OLED screen support
 LTO_ENABLE = yes                # Enable Link Time Optimization for smaller and faster firmware
-# VIA_ENABLE = yes                # Enable dynamic keymap configuration via VIA software
+VIA_ENABLE = no                 # Disable dynamic keymap configuration via VIA software
 TRI_LAYER_ENABLE = yes          # Enable tri-layer feature (third layer activates when two others are on)
 
 MOUSEKEY_ENABLE = yes           # Enable keyboard keys to control mouse pointer
@@ -35,12 +35,14 @@ WPM_ENABLE = yes                # Enable words-per-minute typing measurement
 TAP_DANCE_ENABLE = no           # Disable Tap Dance feature (multiple actions on tap sequences)
 UNICODE_ENABLE = no             # Disable Unicode input support
 COMBO_ENABLE = no               # Disable combo keys (multiple keys pressed together to trigger another)
+CAPS_WORD_ENABLE = no           # Disable caps word (ex: CONST_STRING)
 
 SPACE_CADET_ENABLE = no         # Disable Space Cadet Shift (Shift key sends parentheses when tapped)
 BLUETOOTH_ENABLE = no           # Disable Bluetooth support
 MIDI_ENABLE = no                # Disable MIDI mode (musical keyboard functionality)
 STENO_ENABLE = no               # Disable stenography mode
 AUTO_SHIFT_ENABLE = no          # Disable Auto Shift (auto capitalize when holding keys)
+KEY_OVERRIDE_ENABLE = yes       # Enable override key
 KEY_LOCK_ENABLE = no            # Disable key lock (temporarily disables keys)
 MAGIC_ENABLE = no               # Disable Magic keycodes (special QMK keycodes)
 LEADER_ENABLE = no              # Disable Leader key feature (multi-key shortcuts)

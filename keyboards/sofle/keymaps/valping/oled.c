@@ -2,9 +2,15 @@
 #include "oled_driver.h"
 static uint32_t last_typing_time = 0;
 static uint8_t last_wpm = 0;
+static bool show_keylog = false;
+static char keylog_str[12] = "";
+static uint32_t keylog_timer = 0;
 
 // Animation parameters
 #define FRAME_DURATION 150 // How long each frame lasts in milliseconds
+
+#define KEYLOG_TIMEOUT 1000
+#define KEYLOG_IDLE_TIMEOUT 5000
 
 // Animation variables
 uint32_t timer = 0;
@@ -226,17 +232,70 @@ static void print_status_narrow(void) {
     oled_write_P(PSTR("\n"), false);
 }
 
-void render_wpm_status(void) {
-    oled_write_P(PSTR(" WPM\n "), false);
-    if (timer_elapsed32(last_typing_time) < 1000) {
-        last_wpm = get_current_wpm();
-    } else {
-        last_wpm = 0;
+void render_input_status(void) {
+
+    uint32_t idle = timer_elapsed32(last_typing_time);
+
+    // Auto return WPM after idle
+    if (idle > KEYLOG_IDLE_TIMEOUT) {
+        show_keylog = false;
     }
 
-    char wpm_str[4];
-    snprintf(wpm_str, sizeof(wpm_str), "%03d", last_wpm);
-    oled_write(wpm_str, false);
+    // =========================
+    // KEYLOG MODE
+    // =========================
+    if (show_keylog) {
+
+        char centered[12];
+
+        // Clear key after timeout
+		if (timer_elapsed32(keylog_timer) > KEYLOG_TIMEOUT) {
+
+    		snprintf(centered, sizeof(centered), ".....");
+
+		} else {
+ 		   	uint8_t len = strlen(keylog_str);
+
+ 		   	snprintf(centered, sizeof(centered), "     ");
+
+ 		   	uint8_t start = 0;
+
+ 		   	if (len == 1) {
+ 		       start = 2;
+ 		   	} else if (len == 2) {
+ 		       start = 2;
+ 		   	} else if (len == 3) {
+ 		       start = 1;
+  		  	} else if (len == 4) {
+  		      start = 1;
+ 		   	} else {
+ 		       start = 0;
+  		  	}
+   	 		memcpy(&centered[start], keylog_str, len);
+		}
+
+    	oled_write(centered, false);
+    }
+
+    // =========================
+    // NORMAL WPM MODE
+    // =========================
+    else {
+        // OLED invert OFF
+
+        oled_write_P(PSTR(" WPM\n "), false);
+
+        if (timer_elapsed32(last_typing_time) < 1000) {
+            last_wpm = get_current_wpm();
+        } else {
+            last_wpm = 0;
+        }
+
+        char wpm_str[4];
+
+        snprintf(wpm_str, sizeof(wpm_str), "%03d", last_wpm);
+        oled_write(wpm_str, false);
+    }
 }
 
 void render_user_status(void) {
@@ -249,7 +308,7 @@ void render_user_status(void) {
     } else if (led_usb_state.scroll_lock) {
         oled_write_ln_P(PSTR("Scrol\n"), led_usb_state.scroll_lock);
     } else {
-        oled_write_ln_P(PSTR("_____"), false);
+        oled_write_ln_P(PSTR("====="), false);
     }
 }
 
@@ -268,7 +327,7 @@ bool oled_task_user(void) {
     if (is_keyboard_master()) {
         print_status_narrow();
         render_user_status();
-        render_wpm_status();
+        render_input_status();
     }
 
     return false;

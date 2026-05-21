@@ -2,15 +2,12 @@
 
 #pragma once
 
-#define TRI_LAYER_LOWER_LAYER 2
-#define TRI_LAYER_UPPER_LAYER 3
+#define TRI_LAYER_UPPER_LAYER 2
+#define TRI_LAYER_LOWER_LAYER 3
 #define TRI_LAYER_ADJUST_LAYER 4
 #define OLED_DISPLAY_128X32
-#define DYNAMIC_KEYMAP_LAYER_COUNT 6
 
 /* clear default encoder def */
-#undef TAP_CODE_DELAY
-
 /* encoder support */
 #ifdef ENCODER_RESOLUTION
     #undef ENCODER_RESOLUTION
@@ -70,3 +67,7 @@
 #define NO_ACTION_ONESHOT  // 332
 #define NO_ACTION_FUNCTION // 0
 #define DISABLE_LEADER     // 0
+
+#define NO_MUSIC_MODE
+#define NO_AUDIO
+#define NO_MIDI

@@ -6,15 +6,22 @@ enum sofle_layers {
     /* _M_XYZ = Mac Os, _W_XYZ = Win/Linux */
     _QWERTY,
 	_GAMING,
-    _RAISE,
     _LOWER,
+    _RAISE,
     _ADJUST,
     _DISABLE,
+};
+
+enum custom_keycodes {
+    KEYLOG_ON = SAFE_RANGE,
+    KEYLOG_OFF,
 };
 
 #define KC_QWERTY PDF(_QWERTY)
 #define KC_GAMING PDF(_GAMING)
 #define KC_DISABLE PDF(_DISABLE)
+#define KC_LOCK_SCREEN LGUI(KC_L)
+#define KC_QUIT LALT(KC_F4)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /*
@@ -53,7 +60,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------|  VolUD|               | ScrolD|------+------+------+------+------+------|
  * |LCtrl |   Z  |   X  |   C  |   V  |   B  |-------|               |-------| Num0 | Num1 | Num2 | Num3 |      | Enter|
  * `-----------------------------------------/       /                \      \-----------------------------------------'
- *            | ESC  | LAlt | LCTR |RAISE | /Space  /                  \Enter \  |LOWER | Del  | RAlt | RCtr |
+ *            | ESC  | LGUI | LAlt |RAISE | /Space  /                  \Enter \  |LOWER | Del  | RAlt | RCtr |
  *            |      |      |      |      |/       /                    \      \ |      |      |      |      |
  *            `----------------------------------'                      '-----------------------------------'
  */
@@ -63,7 +70,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_TAB  , KC_Q  ,   KC_W,   KC_E,   KC_R,    KC_T,                      XXXXXXX,   KC_7 ,  KC_8  ,  KC_9  , KC_PMNS, XXXXXXX,
     KC_LSFT , KC_A  ,   KC_S,   KC_D,   KC_F,    KC_G,                      XXXXXXX,   KC_4 ,  KC_5  ,  KC_6  , KC_PPLS, XXXXXXX,
     KC_LCTL , KC_Z  ,   KC_X,   KC_C,   KC_V,    KC_B, KC_MUTE,     KC_PSCR, KC_0 ,   KC_1 ,  KC_2  ,  KC_3  , XXXXXXX , KC_ENT,
-            KC_ESC , KC_LGUI, KC_LALT, TL_LOWR, KC_SPC,     			      KC_ENT, TL_UPPR, KC_DEL  , KC_RALT, KC_RCTL
+            KC_ESC , KC_LGUI, KC_LALT, TL_LOWR, KC_SPC,     			      KC_SPC, TL_UPPR, KC_DEL  , KC_RALT, KC_RCTL
   ),
 /* RAISE
  * ,-----------------------------------------.                               ,-----------------------------------------.
@@ -75,16 +82,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------|ScrolR |               | ScrolD|------+------+------+------+------+------|
  * |      |  =   |  -   |  +   |  {   |   }  |-------|               |-------|   [  |   ]  |   ;  |   :  |   \  |      |
  * `-----------------------------------------/       /                \      \-----------------------------------------'
- *            | LGUI | LAlt |  Del |RAISE | /Space  /                  \Enter \  |LOWER | DEL  | RAlt | RGUI |
+ *            | LAlt | LGUI |  Del |RAISE | /Space  /                  \Enter \  |      |      |      |      |
  *            |      |      |      |      |/       /                    \      \ |      |      |      |      |
  *            `----------------------------------'                      '------------------------------------'
  */
 [_RAISE] = LAYOUT(
-  _______,    KC_F1,  KC_F2, KC_F3,   KC_F4,   KC_F5,                           KC_F6,   KC_F7,   KC_F8,   KC_F9,  KC_F10,  KC_F11,
-  KC_GRV,     KC_6,   KC_7,  KC_8,    KC_9,    KC_0,                            XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_F12,
-  _______,    KC_1,   KC_2,  KC_3,    KC_4,    KC_5,                         KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_PIPE,
-  _______,  KC_EQL, KC_MINS, KC_PLUS, KC_LBRC, KC_RBRC, _______,       _______, KC_LCBR, KC_RCBR, KC_SCLN, KC_COLN, KC_BSLS, _______,
-                   _______, _______, KC_DEL, _______, _______,          _______, _______, _______, _______, _______
+  _______,    KC_F1,  KC_F2, KC_F3,   KC_F4,   KC_F5,                                  KC_F6,   KC_F7,   KC_F8,   KC_F9,  KC_F10,  KC_F11,
+  KC_GRV,     KC_6,   KC_7,  KC_8,    KC_9,    KC_0,                                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_F12,
+  _______,    KC_1,   KC_2,  KC_3,    KC_4,    KC_5,                                   KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_PIPE,
+  _______,  KC_EQL, KC_MINS, KC_PLUS, KC_LBRC, KC_RBRC, _______,              _______, KC_LCBR, KC_RCBR, KC_SCLN, KC_COLN, KC_BSLS, _______,
+                   KC_LALT, _______, KC_DEL, _______, _______,                     _______, _______, _______, _______, _______
 ),
 /* LOWER
  * ,----------------------------------------.                                ,-----------------------------------------.
@@ -96,7 +103,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------| VolUD |              | TabD  |------+------+------+------+------+------|
  * |      | Acc2 | Acc1 | Acc0 |      |      |-------|              |-------|Mouse1|Whel-L|Whel-U|Whel-D|Whel-R| Shift|
  * `-----------------------------------------/       /               \      \-----------------------------------------'
- *            |      |      |      |RAISE | /Space  /                 \Enter \  |LOWER | DEL  | RAlt | RGUI |
+ *            |      |      |      |RAISE | /Space  /                 \Enter \  |LOWER | Prev | Stop | Next |
  *            |      |      |      |      |/       /                   \      \ |      |      |      |      |
  *            `----------------------------------'                     '------------------------------------'
  */
@@ -105,27 +112,27 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   _______,  MS_BTN1,  MS_UP,   MS_BTN2,  MS_BTN3, XXXXXXX,                       KC_PGUP, KC_DEL,  KC_UP,   KC_INS,  MS_ACL0, MS_ACL1,
   _______, MS_LEFT,  MS_DOWN,  MS_RGHT,  XXXXXXX, XXXXXXX,                       KC_PGDN, KC_LEFT, KC_DOWN, KC_RGHT, KC_END, KC_HOME,
   _______, MS_ACL2, MS_ACL1, MS_ACL0, _______, XXXXXXX,  _______,       _______, MS_BTN1, MS_WHLL, MS_WHLU, MS_WHLD, MS_WHLR, _______,
-                   _______, _______, _______, _______, _______,           _______, _______, KC_MPRV, KC_MPLY, KC_MNXT
+                   _______, _______, _______, _______, _______,             KC_LOCK_SCREEN, _______, KC_MPRV, KC_MPLY, KC_MNXT
 ),
 /* ADJUST
  * ,-----------------------------------------.                               ,-----------------------------------------.
- * |      |      |      |      |      |      |-------.               ,-------|      | NumP |  /   |   *  |      |      |
+ * |      |      |LOG_ON|LOGOFF|      |      |-------.               ,-------|      | NumP |  /   |   *  |      |      |
  * |------+------+------+------+------+------|  VolU |               | ScrolU|------+------+------+------+------+------|
  * |QKBOOT|      |QWERTY|GAMING|DISABL|      |-------.               ,-------|      | Numu | Num8 | Num9 |  -   |      |
  * |------+------+------+------+------+------|  MUTE |               |ScrolLk|------+------+------+------+------+------|
- * |      |      |      |      |      |MACWIN|-------.               ,-------|      | Num4 | Num5 | Num6 |  +   |      |
+ * |S-WAKE|S-Slep|      |      |      |MACWIN|-------.               ,-------|      | Num4 | Num5 | Num6 |  +   |      |
  * |------+------+------+------+------+------|  VolU |               | ScrolD|------+------+------+------+------+------|
- * |S-Down|S-Slep|S-WAKE| CALC |      |      |-------|               |-------| Num0 | Num1 | Num2 | Num3 | Enter|      |
+ * |S-Down|      |C-Pnel| CALC |      | QUIT |-------|               |-------| Num0 | Num1 | Num2 | Num3 | Enter|      |
  * `-----------------------------------------/       /                \      \-----------------------------------------'
- *            | LGUI | LAlt | LCTR |RAISE | /Enter  /                  \Space \  |LOWER | DOT  | RAlt | RGUI |
+ *            | LGUI | LAlt |      |RAISE | /Enter  /                  \Space \  |LOWER | DOT  | RAlt | RGUI |
  *            |      |      |      |      |/       /                    \      \ |      |      |      |      |
  *            `----------------------------------'                      '------------------------------------'
  */
   [_ADJUST] = LAYOUT(
-  _______ ,_______,  _______ ,_______ , _______, _______,                       XXXXXXX, KC_NUM, KC_PSLS, KC_PAST, XXXXXXX, _______,
+  _______ ,_______,  KEYLOG_ON ,KEYLOG_OFF , _______, _______,                       XXXXXXX, KC_NUM, KC_PSLS, KC_PAST, XXXXXXX, _______,
   QK_BOOT  ,XXXXXXX,KC_QWERTY,KC_GAMING,KC_DISABLE,XXXXXXX,                        XXXXXXX, KC_P7,  KC_P8,   KC_P9,   KC_PMNS, XXXXXXX,
-  XXXXXXX , XXXXXXX,XXXXXXX, XXXXXXX, XXXXXXX,  CG_TOGG,                        XXXXXXX, KC_P4,  KC_P5,   KC_P6,   KC_PPLS, XXXXXXX,
-  KC_PWR , KC_SLEP, KC_WAKE, KC_CALC, XXXXXXX,  XXXXXXX,_______,      KC_SCRL, KC_P0,   KC_P1,  KC_P2,   KC_P3,   KC_PENT, _______,
+  KC_WAKE , KC_SLEP,XXXXXXX, XXXXXXX, XXXXXXX,  CG_TOGG,                        XXXXXXX, KC_P4,  KC_P5,   KC_P6,   KC_PPLS, XXXXXXX,
+  KC_PWR , XXXXXXX, KC_CPNL, KC_CALC, XXXXXXX,  KC_QUIT,_______,      KC_SCRL, KC_P0,   KC_P1,  KC_P2,   KC_P3,   KC_PENT, _______,
                    _______, _______, _______, _______, _______,          _______, _______, KC_PDOT, _______, _______
   ),
 /* DISABLE
@@ -152,14 +159,136 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 
+const char *keycode_to_string(uint16_t keycode, bool shifted) {
+
+    static char keylog_char[2] = {' ', '\0'};
+
+    // A-Z
+    if (keycode >= KC_A && keycode <= KC_Z) {
+        keylog_char[0] =
+            (shifted ? 'A' : 'a') + (keycode - KC_A);
+        return keylog_char;
+    }
+
+    // 0-9
+    if (keycode >= KC_1 && keycode <= KC_9) {
+
+        const char normal[]  = "123456789";
+        const char shifted_[] = "!@#$%^&*(";
+
+        keylog_char[0] =
+            shifted
+            ? shifted_[keycode - KC_1]
+            : normal[keycode - KC_1];
+
+        return keylog_char;
+    }
+
+    if (keycode == KC_0) {
+        keylog_char[0] = shifted ? ')' : '0';
+        return keylog_char;
+    }
+
+    switch (keycode) {
+
+        case KC_SPC:
+            keylog_char[0] = ' ';
+            return keylog_char;
+
+        case KC_DOT:
+            keylog_char[0] = shifted ? '>' : '.';
+            return keylog_char;
+
+        case KC_COMM:
+            keylog_char[0] = shifted ? '<' : ',';
+            return keylog_char;
+
+        case KC_SLSH:
+            keylog_char[0] = shifted ? '?' : '/';
+            return keylog_char;
+
+        case KC_SCLN:
+            keylog_char[0] = shifted ? ':' : ';';
+            return keylog_char;
+
+        case KC_QUOT:
+            keylog_char[0] = shifted ? '"' : '\'';
+            return keylog_char;
+
+        case KC_BSPC:
+            return "BSP";
+
+        case KC_ENT:
+            return "ENT";
+
+        default:
+            return NULL;
+    }
+}
+
 
 #include "oled.c"
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+
     if (record->event.pressed) {
-        last_typing_time = timer_read32();  // reset timer when pressed
+
+        last_typing_time = timer_read32();
+
+        switch (keycode) {
+
+            case KEYLOG_ON:
+                show_keylog = true;
+                return false;
+
+            case KEYLOG_OFF:
+                show_keylog = false;
+                return false;
+        }
+
+        if (show_keylog) {
+
+            bool shifted =
+                (get_mods() & MOD_MASK_SHIFT) ||
+                (host_keyboard_led_state().caps_lock &&
+                keycode >= KC_A &&
+                keycode <= KC_Z);
+
+            const char *key_str = keycode_to_string(keycode, shifted);
+
+            if (key_str != NULL) {
+                snprintf(
+                    keylog_str,
+                    sizeof(keylog_str),
+                    "%s",
+                    key_str
+                );
+
+                keylog_timer = timer_read32();
+            }
+        }
+    }
+
+    return true;
 }
-return true;
-}
+
+
+// =======================
+// KEY OVERRIDES
+// =======================
+
+// Alt + BSPC => DEL
+const key_override_t delete_key_override =
+    ko_make_basic(MOD_MASK_ALT, KC_BSPC, KC_DEL);
+    
+// Shift + DEL => BSPC
+const key_override_t backspace_key_override =
+    ko_make_basic(MOD_MASK_SHIFT, KC_DEL, KC_BSPC);
+
+const key_override_t *key_overrides[] = {
+    &backspace_key_override,
+    &delete_key_override,
+    NULL
+};
 
 // !IMPORTANT (Make sure you disable the default encoder behavior)
 //
@@ -169,81 +298,80 @@ return true;
 // and to scroll the screen when the layer is 2 or 3
 #ifdef ENCODER_ENABLE
 
-static bool alt_tab_active = false;
-static uint16_t alt_tab_timer = 0;
-
 bool encoder_update_kb(uint8_t index, bool clockwise) {
     switch (get_highest_layer(layer_state)) {
-        case 2:
+        case _RAISE:
         
             if (index == 0) {
-                if (!clockwise) {
-                    tap_code(MS_WHLR);
-                } else {
+                if (clockwise) {
                     tap_code(MS_WHLL);
+                } else {
+                    tap_code(MS_WHLR);
                 }
             }
             
             else if (index == 1) {
-                if (!clockwise) {
-                    tap_code(MS_WHLD);
-                } else {
+                if (clockwise) {
                     tap_code(MS_WHLU);
+                } else {
+                    tap_code(MS_WHLD);
                 }
             }
             break;
-        case 3:
+        case _LOWER:
             if (index == 0) {
-                if (!clockwise) {
+                if (clockwise) {
                     tap_code(KC_VOLU);
                 } else {
                     tap_code(KC_VOLD);
                 }
             }
             else if(index == 1){
-                if (!alt_tab_active) {
-                    register_code(KC_LALT);
-                    alt_tab_active = true;
-                }
-                alt_tab_timer = timer_read();
-
-                if (!clockwise) {
-                    tap_code(KC_TAB);
+                if (clockwise) {
+                    tap_code(MS_WHLR);
                 } else {
-                    register_code(KC_LSFT);
-                    tap_code(KC_TAB);
-                    unregister_code(KC_LSFT);
+                    tap_code(MS_WHLL);
                 }
 
             }                                       
 
         break;
+        
+        case _ADJUST:
+            if (index == 0) {
+                if (clockwise) {
+                    tap_code16(C(KC_EQL));
+                } else {
+                    tap_code16(C(KC_MINS));
+                }
+            }   
+            else if (index == 1) {
+                if (clockwise) {
+                    tap_code(MS_WHLU);
+                } else {
+                    tap_code(MS_WHLD);
+                }
+            }                               
+        break;
 
         default:
             if (index == 0) {
-                if (!clockwise) {
-                    tap_code(KC_VOLU);
-                } else {
+                if (clockwise) {
                     tap_code(KC_VOLD);
+                } else {
+                    tap_code(KC_VOLU);
                 }
             }
             else if (index == 1) {
-                if (!clockwise) {
-                    tap_code(MS_WHLD);
-                } else {
+                if (clockwise) {
                     tap_code(MS_WHLU);
+                } else {
+                    tap_code(MS_WHLD);
                 }
             }
         break;
     }
     return true;
-}
-
-void matrix_scan_user(void) {
-    if (alt_tab_active && timer_elapsed(alt_tab_timer) > 2000) {
-        unregister_code(KC_LALT);
-        alt_tab_active = false;
-    }
 }
 
 #endif
